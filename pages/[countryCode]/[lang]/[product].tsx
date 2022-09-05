@@ -1,7 +1,7 @@
-import React, { useContext, FunctionComponent } from 'react'
-import { GetStaticPaths, GetStaticProps } from 'next'
-import _ from 'lodash'
-import Layout from '@components/Layout'
+import React, { useContext, FunctionComponent } from "react"
+import { GetStaticPaths, GetStaticProps } from "next"
+import _ from "lodash"
+import Layout from "@components/Layout"
 import {
   CommerceLayer,
   Price,
@@ -12,14 +12,14 @@ import {
   ItemContainer,
   AddToCartButton,
   OrderStorage,
-} from '@commercelayer/react-components'
-import LayoutContext from '@context/LayoutContext'
-import { useGetToken } from '@hooks/GetToken'
-import { useRouter } from 'next/router'
-import locale from '@locale/index'
-import { parseImg, parseLanguageCode } from '@utils/parser'
-import { cmsFunctions } from '@utils/cms'
-import { Product, Country } from '@typings/models'
+} from "@commercelayer/react-components"
+import LayoutContext from "@context/LayoutContext"
+import { useGetToken } from "@hooks/GetToken"
+import { useRouter } from "next/router"
+import locale from "@locale/index"
+import { parseImg, parseLanguageCode } from "@utils/parser"
+import { cmsFunctions } from "@utils/cms"
+import { Product, Country } from "@typings/models"
 
 const AddToCartCustom = (props: any) => {
   const { className, label, disabled, handleClick } = props
@@ -56,7 +56,7 @@ const ProductPage: FunctionComponent<Props> = ({
   clientId,
   endpoint,
   countryCode,
-  lang = 'en-US',
+  lang = "en-US",
   marketId,
   buildLanguages,
   cms,
@@ -69,6 +69,7 @@ const ProductPage: FunctionComponent<Props> = ({
     scope: marketId,
     countryCode: router.query?.countryCode as string,
   })
+  console.log("Token: ", token)
   const imgUrl = parseImg(_.first(product?.images)?.url as string, cms)
   const firstVariantCode = _.first(product?.variants)?.code
   const variantOptions = product?.variants?.map((variant) => {
@@ -85,7 +86,7 @@ const ProductPage: FunctionComponent<Props> = ({
     e.preventDefault()
     router.back()
   }
-  const languageCode = parseLanguageCode(lang, 'toLowerCase', true)
+  const languageCode = parseLanguageCode(lang, "toLowerCase", true)
   return !product ? null : (
     <CommerceLayer accessToken={token} endpoint={endpoint}>
       <OrderStorage persistKey={`order-${countryCode}`}>
@@ -133,7 +134,7 @@ const ProductPage: FunctionComponent<Props> = ({
                           <VariantsContainer>
                             <VariantSelector
                               placeholder={locale[lang].selectSize as string}
-                              options={_.sortBy(variantOptions, 'label')}
+                              options={_.sortBy(variantOptions, "label")}
                               className="rounded border appearance-none border-gray-400 py-2 focus:outline-none focus:border-blue-500 text-base pl-3 pr-10"
                             />
                           </VariantsContainer>
@@ -198,7 +199,7 @@ export const getStaticProps: GetStaticProps = async ({ params }: any) => {
     ? await cmsFunctions[`${cms}AllCountries`](lang)
     : {}
   const buildLanguages = _.compact(
-    process.env.BUILD_LANGUAGES?.split(',').map((l) => {
+    process.env.BUILD_LANGUAGES?.split(",").map((l) => {
       const country = countries.find(
         (country: Country) => country.code === parseLanguageCode(l)
       )
