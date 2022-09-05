@@ -1,24 +1,24 @@
-import sanityClient from '@sanity/client'
-import { Product, Taxon, Taxonomy, Variant } from '@typings/models'
-import { parseLocale } from '@utils/parser'
-import _ from 'lodash'
+import sanityClient from "@sanity/client"
+import { Product, Taxon, Taxonomy, Variant } from "@typings/models"
+import { parseLocale } from "@utils/parser"
+import _ from "lodash"
 import {
   SanityCountry,
   SanityProduct,
   SanityTaxon,
   SanityTaxonomy,
   SanityVariant,
-} from './typings'
+} from "./typings"
 
 const client = sanityClient({
   projectId: process.env.SANITY_PROJECT_ID as string,
   dataset: process.env.SANITY_DATASET as string,
-  apiVersion: '2021-08-31',
-  useCdn: process.env.NODE_ENV === 'production', // `false` if you want to ensure fresh data
+  apiVersion: "2021-08-31",
+  useCdn: false, // `false` if you want to ensure fresh data
 })
 
-const sanityAllCountries = async (locale = 'en-US') => {
-  const lang = parseLocale(locale, '_', '-', 'lowercase')
+const sanityAllCountries = async (locale = "en-US") => {
+  const lang = parseLocale(locale, "_", "-", "lowercase")
   const query = `*[_type == "country"]{
     name,
     code,
@@ -42,13 +42,13 @@ const sanityAllCountries = async (locale = 'en-US') => {
 
 const parsingVariant = (
   variants: SanityVariant[],
-  lang = 'en_us'
+  lang = "en_us"
 ): Variant[] => {
   return !_.isEmpty(variants)
     ? variants.map((variant) => {
         const localization = {
-          name: variant?.name?.[lang] || '',
-          size: { name: variant?.size?.name?.[lang] || '' },
+          name: variant?.name?.[lang] || "",
+          size: { name: variant?.size?.name?.[lang] || "" },
         }
         return { ...variant, ...localization }
       })
@@ -57,7 +57,7 @@ const parsingVariant = (
 
 const parsingProduct = (
   products: SanityProduct[] | SanityProduct,
-  lang = 'en_us'
+  lang = "en_us"
 ): Product[] | Product => {
   return _.isArray(products)
     ? products.map((product) => {
@@ -78,7 +78,7 @@ const parsingProduct = (
       }
 }
 
-const parsingTaxon = (taxons: SanityTaxon[], lang = 'en_us'): Taxon[] => {
+const parsingTaxon = (taxons: SanityTaxon[], lang = "en_us"): Taxon[] => {
   return taxons.map((taxon) => {
     const localization = {
       name: taxon?.name[lang],
@@ -93,9 +93,9 @@ const parsingTaxon = (taxons: SanityTaxon[], lang = 'en_us'): Taxon[] => {
 
 const parsingTaxonomies = (
   taxonomies: SanityTaxonomy[],
-  locale = 'en-US'
+  locale = "en-US"
 ): Taxonomy[] => {
-  const lang = parseLocale(locale, '_', '-', 'lowercase')
+  const lang = parseLocale(locale, "_", "-", "lowercase")
   const items = taxonomies.map((taxonomy) => {
     const localization = {
       name: taxonomy?.name[lang],
@@ -106,7 +106,7 @@ const parsingTaxonomies = (
   })
   return items
 }
-const sanityAllTaxonomies = async (catalogId: string, locale = 'en-US') => {
+const sanityAllTaxonomies = async (catalogId: string, locale = "en-US") => {
   // const newLocale = getLocale(locale)
   const query = `*[_type == "catalog" && _id == '${catalogId}']{
     'taxonomies': taxonomies[]->{
@@ -133,11 +133,12 @@ const sanityAllTaxonomies = async (catalogId: string, locale = 'en-US') => {
     }
   }  | order(name asc)`
   const items: any[] = await client.fetch(query)
+  console.log("PRODUCTS ", items)
   return parsingTaxonomies(_.first(items)?.taxonomies, locale)
 }
 
-const sanityGetProduct = async (slug: string, locale = 'en-US') => {
-  const lang = parseLocale(locale, '_', '-', 'lowercase')
+const sanityGetProduct = async (slug: string, locale = "en-US") => {
+  const lang = parseLocale(locale, "_", "-", "lowercase")
   const query = `*[_type == "product" && slug["${lang}"].current == "${slug}"]{
     name,
     description,
