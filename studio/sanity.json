@@ -5,6 +5,7 @@
     "basePath": "/"
   },
   "api": {
+    " projectTitle": "Commerce Layer Starter",
     "projectId": "o3vixnje",
     "dataset": "production"
   },
@@ -18,9 +19,7 @@
   ],
   "env": {
     "development": {
-      "plugins": [
-        "@sanity/vision"
-      ]
+      "plugins": ["@sanity/vision"]
     }
   },
   "parts": [
