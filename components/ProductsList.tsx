@@ -1,16 +1,17 @@
-import { Price, PricesContainer } from '@commercelayer/react-components'
-import { Product } from '@typings/models'
-import _ from 'lodash'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import React from 'react'
-import locale from '@locale/index'
+import { Price, PricesContainer } from "@commercelayer/react-components"
+import { Product } from "@typings/models"
+import _ from "lodash"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import React from "react"
+import locale from "@locale/index"
 
 type Props = {
   products: Product[]
 }
 
 const ProductsList = ({ products }: Props) => {
+  console.log("PRODUCTS: ", products)
   const {
     query: { countryCode, lang },
   } = useRouter()

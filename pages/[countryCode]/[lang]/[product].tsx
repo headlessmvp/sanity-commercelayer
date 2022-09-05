@@ -70,6 +70,7 @@ const ProductPage: FunctionComponent<Props> = ({
     countryCode: router.query?.countryCode as string,
   })
   console.log("Token: ", token)
+  console.log("PRODUCT: ", product)
   const imgUrl = parseImg(_.first(product?.images)?.url as string, cms)
   const firstVariantCode = _.first(product?.variants)?.code
   const variantOptions = product?.variants?.map((variant) => {
@@ -87,6 +88,9 @@ const ProductPage: FunctionComponent<Props> = ({
     router.back()
   }
   const languageCode = parseLanguageCode(lang, "toLowerCase", true)
+
+  console.log("PRODUCT: ", product)
+
   return !product ? null : (
     <CommerceLayer accessToken={token} endpoint={endpoint}>
       <OrderStorage persistKey={`order-${countryCode}`}>
